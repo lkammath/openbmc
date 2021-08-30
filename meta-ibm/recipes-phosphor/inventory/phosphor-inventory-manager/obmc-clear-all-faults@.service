@@ -1,0 +1,14 @@
+[Unit]
+Description=Clears all fault LED to %i
+Wants=xyz.openbmc_project.Inventory.Manager
+After=xyz.openbmc_project.Inventory.Manager
+After=op-reset-chassis-running@0.service
+ConditionPathExists=!/run/openbmc/chassis@0-on
+
+[Service]
+Type=oneshot
+Restart=no
+EnvironmentFile={envfiledir}/obmc/led/clear-all/faults/config
+ExecStart=/bin/bash -c "clear-all-faults.sh %i ${{EXCLUDED_GROUPS}}"
+SyslogIdentifier=obmc-clear-all-faults
+
